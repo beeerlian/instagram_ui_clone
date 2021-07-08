@@ -3,7 +3,7 @@ class Story {
   String username;
   String cover;
   String story;
-
+  bool isVisited = false;
   Story({required this.username, required this.cover, required this.story});
 }
 

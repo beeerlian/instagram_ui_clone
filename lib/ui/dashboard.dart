@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_ui_remake/model/post.dart';
 import 'package:instagram_ui_remake/model/story.dart';
+import 'package:instagram_ui_remake/ui/profil.dart';
+import 'package:instagram_ui_remake/ui/story.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -13,90 +15,106 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(40),
-          child: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.white,
-            title: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  new Image.asset(
-                    "assets/logo/logo.png",
-                    height: 30,
+      backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40),
+        child: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          title: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                new Image.asset(
+                  "assets/logo/logo.png",
+                  height: 30,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.send_outlined,
+                    color: Colors.black,
+                    size: 25,
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.near_me_outlined,
-                      color: Colors.black,
-                      size: 25,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
-        body: ListView(
-          shrinkWrap: true,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            Container(
-              height: 85,
-              padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: stories.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.only(right: 10),
-                    child: Column(
-                      children: [
-                        Stack(
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  height: 85,
+                  padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: stories.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        padding: EdgeInsets.only(right: 10),
+                        child: Column(
                           children: [
-                            Container(
-                              height: 66,
-                              width: 66,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  style: BorderStyle.solid,
-                                  color: Colors.green,
-                                  width: 2,
-                                ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return StoryView(index);
+                                }));
+                              },
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    height: 66,
+                                    width: 66,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        style: BorderStyle.solid,
+                                        color: stories[index].isVisited
+                                            ? Colors.black54
+                                            : Colors.green,
+                                        width: 2,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.all(5),
+                                    height: 56,
+                                    width: 56,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            image: AssetImage(
+                                                stories[index].cover))),
+                                  ),
+                                ],
                               ),
+                            
                             ),
-                            Container(
-                              margin: EdgeInsets.all(5),
-                              height: 56,
-                              width: 56,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: AssetImage(stories[index].cover))),
+                            Text(
+                              stories[index].username,
+                              style: TextStyle(fontSize: 10),
                             ),
                           ],
                         ),
-                        Text(
-                          stories[index].username,
-                          style: TextStyle(fontSize: 10),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-            Divider(
-              height: 2,
-              color: Colors.black45,
-            ),
-            Container(
-                height: 900,
-                child: ListView.builder(
-                    shrinkWrap: false,
+                      );
+                    },
+                  ),
+                ),
+                Divider(
+                  height: 2,
+                  color: Colors.black45,
+                ),
+                Container(
+                  height:
+                      MediaQuery.of(context).size.height * posts.length * 1.12,
+                  child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: posts.length,
                     itemBuilder: (context, index) {
                       return Container(
@@ -249,8 +267,7 @@ class _DashboardState extends State<Dashboard> {
                                   Text(
                                     "Lihat semua ${posts[index].comment.toString()} komentar",
                                     style: TextStyle(
-                                        color: Colors.black45,
-                                        fontSize: 11),
+                                        color: Colors.black45, fontSize: 11),
                                   )
                                 ],
                               ),
@@ -258,8 +275,52 @@ class _DashboardState extends State<Dashboard> {
                           ],
                         ),
                       );
-                    }))
+                    },
+                  ),
+                )
+              ],
+            ),
           ],
-        ));
+        ),
+      ),
+      bottomNavigationBar: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.home_filled, color: Colors.black, size: 30),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.search, color: Colors.black, size: 30),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.add_box_outlined, color: Colors.black, size: 30),
+          ),
+          IconButton(
+            onPressed: () {
+              
+            },
+            icon: Icon(Icons.favorite_outline, color: Colors.black, size: 30),
+          ),
+          GestureDetector(
+            onTap: (){Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return Profil();
+              }));},
+            child: Container(
+              margin: EdgeInsets.all(3),
+              height: 28,
+              width: 30,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/user1.jpg"))),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
