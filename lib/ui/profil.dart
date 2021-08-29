@@ -260,9 +260,12 @@ class _ProfilState extends State<Profil> {
         children: [
           IconButton(
             onPressed: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                return Dashboard();
-              }));
+             Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) =>
+                          Dashboard(),
+                      transitionDuration: Duration(seconds: 0)));
             },
             icon: Icon(Icons.home_outlined, color: Colors.black, size: 30),
           ),

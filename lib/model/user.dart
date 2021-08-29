@@ -1,6 +1,7 @@
 import 'package:instagram_ui_remake/model/post.dart';
 
 class User {
+
   String Username, fotoProfil, followers, bio;
 
   int following;
